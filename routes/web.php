@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\VideoController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,9 +21,27 @@ Route::get('/', function () {
 
 require __DIR__.'/auth.php';
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::middleware('auth')->group(function () {
+
+    Livewire::setUpdateRoute(function ($handle) {
+        return Route::post('/livewire/update', $handle);
+    });
+
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
+
+    Route::controller(VideoController::class)->group(function () {
+        Route::get('/create-video','create')->name('create_video');
+        Route::post('/store-video','store')->name('store_video');
+        Route::get('/edit-video/{IdVideo}','edit')->name('edit_video');
+        Route::put('/update-video/{IdVideo}','update')->name('update_video');
+        Route::delete('/delete-video/{IdVideo}','delete')->name('delete_video');
+    });
+
+});
+
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
