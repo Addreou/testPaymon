@@ -4,49 +4,36 @@ namespace App\Livewire;
 
 use App\Models\Video;
 use Livewire\Component;
-use Illuminate\Support\Facades\Gate;
+use Livewire\Attributes\On;
 
 class ViewVideos extends Component
 {
     public $Videos;
     public $FirstVideo;
 
-    public int $IdConfirm = 0;
+    public function getFirstVideo($item)
+    {
+        $url = $item->url;
+        parse_str(parse_url($url, PHP_URL_QUERY), $array);
+        $item->url = $array['v'];
+        $this->FirstVideo = $item;
+    }
 
+    #[On('refreshViewVideos')]
     public function mount()
     {
-        // $this->Videos = Video::all();
-        // $url = $this->Videos[0]->url;
-        // parse_str(parse_url($url, PHP_URL_QUERY), $array);
-        // $this->Videos[0]->url = $array['v'];
-        // $this->FirstVideo = $this->Videos[0];
-        // dump($this->FirstVideo,$this->IdConfirm);
+        $this->Videos = Video::all();
+        $this->getFirstVideo($this->Videos[0]);
     }
 
-    public function confirm($IdVideo)
+    public function play($IdVideo)
     {
-        $this->IdConfirm = $IdVideo;
-        dump($this->IdConfirm);
-    }
-
-    public function delete($IdVideo)
-    {
-        if(!Gate::any(['test_developer','test_admin']))
-        {
-            abort(403);
-        }
-
-        Video::where($IdVideo)->delete();
+        $Video = Video::where('id',$IdVideo)->first();
+        $this->getFirstVideo($Video);
     }
 
     public function render()
     {
-        $this->Videos = Video::all();
-        $url = $this->Videos[0]->url;
-        parse_str(parse_url($url, PHP_URL_QUERY), $array);
-        $this->Videos[0]->url = $array['v'];
-        $this->FirstVideo = $this->Videos[0];
-
         return view('livewire.view-videos');
     }
 }

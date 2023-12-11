@@ -19,44 +19,15 @@
                 @foreach ($Videos as $video)
                     <div class="flex justify-between items-center">
                         <div class="grid">
-                            <label class="text-lg">{{$video->title}}</label>
+                            <label class="text-lg">{{$video->id}} - {{$video->title}}</label>
                             <span class="text-md">{{$video->main_character}}</span>
                             <span class="opacity-50">{{$video->description}}</span>
                         </div>
                         <div>
-                            
-                            @if($IdConfirm===0)
-                                <button class="p-2 rounded-md bg-cyan-700 hover:bg-cyan-500 text-white">Reproducir</button>
-                                @canany(['test_developer','test_admin'])
-                                    <a href="{{ route('edit_video',$video->id)}}" class="p-2 rounded-md bg-yellow-700 hover:bg-yellow-500 text-white">Editar</a>
-                                @endcanany
+                            @if ($video->id != $FirstVideo->id)
+                                <button wire:click="play('{{$video->id}}')" class="p-2 rounded-md bg-cyan-700 hover:bg-cyan-500 text-white content-center">Ver</button>
                             @endif
-                            <div wire:loading.remove class="relative flex items-center gap-2">
-                                @if($IdConfirm!=0)
-                                    <div class="relative flex flex-col items-center group">
-                                        <button type="button"
-                                                wire:click="delete('{{$video->id}}')"
-                                                class="p-2 rounded-md bg-green-700 hover:bg-green-500 text-white">
-                                            Confirmar
-                                        </button>
-                                    </div>
-                                    <div class="relative flex flex-col items-center group">
-                                        <button type="button"
-                                                wire:click="confirm('0')"
-                                                class="p-2 rounded-md bg-red-700 hover:bg-red-500 text-white">
-                                            Cancelar
-                                        </button>
-                                    </div>
-                                @else
-                                    <div class="inline-flex group">
-                                        <button type="button"
-                                                wire:click="confirm('{{$video->id}}')"
-                                                class="p-2 rounded-md bg-red-700 hover:bg-red-500 text-white">
-                                            Eliminar
-                                        </button>
-                                    </div>
-                                @endif
-                            </div>
+                            @livewire('actions-videos',['IdVideo'=> $video->id], key($video->pluck('id')->join(uniqid())))
                         </div>
                     </div>
                 @endforeach
