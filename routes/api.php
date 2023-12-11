@@ -24,14 +24,12 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('/login','login');
 });
 
-Route::controller(VideoController::class)->group(function () {
-    Route::post('/crear_video','store')->name('store.video');
-});
-
 Route::middleware('auth:sanctum')->group(function () {
 
     Route::controller(VideoController::class)->group(function () {
-        Route::get('/listado_videos','index')->name('listado');
+        Route::get('/listado_videos','index');
+        Route::post('/crear_video','store');
+        Route::put('/editar_video/{IdVideo}','update');
+        Route::delete('/eliminar_video/{IdVideo}','delete');
     });
-
 });

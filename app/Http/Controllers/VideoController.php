@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\VideosAction;
 use App\Http\Requests\VideoRequest;
 use App\Models\Video;
 use Illuminate\Support\Facades\Gate;
@@ -18,20 +19,14 @@ class VideoController extends Controller
         return view('video_create');
     }
 
-    public function store(VideoRequest $request)
+    public function store(VideoRequest $request, VideosAction $action)
     {
         if(!Gate::any(['test_developer','test_admin']))
         {
             abort(403);
         }
 
-        Video::create([
-            'title' => $request->title,
-            'main_character' => $request->main_character,
-            'type' => $request->type,
-            'description' => $request->description,
-            'url' => $request->url,
-        ]);
+        $Video = $action->store($request);
 
         return redirect()->route('dashboard');
     }
@@ -48,33 +43,27 @@ class VideoController extends Controller
         return view('video_edit',compact('Video'));
     }
 
-    public function update (VideoRequest $request, $IdVideo)
+    public function update (VideoRequest $request, $IdVideo, VideosAction $action)
     {
         if(!Gate::any(['test_developer','test_admin']))
         {
             abort(403);
         }
 
-        Video::where('id',$IdVideo)->update([
-            'title' => $request->title,
-            'main_character' => $request->main_character,
-            'type' => $request->type,
-            'description' => $request->description,
-            'url' => $request->url,
-        ]);
+        $Video = $action->update($request, $IdVideo);
 
         return redirect()->route('dashboard');
     }
 
-    public function delete($IdVideo)
-    {
-        if(!Gate::any(['test_developer','test_admin']))
-        {
-            abort(403);
-        }
+    // public function delete($IdVideo)
+    // {
+    //     if(!Gate::any(['test_developer','test_admin']))
+    //     {
+    //         abort(403);
+    //     }
 
-        Video::where('id',$IdVideo)->delete();
+    //     Video::where('id',$IdVideo)->delete();
 
-        return redirect()->route('dashboard');
-    }
+    //     return redirect()->route('dashboard');
+    // }
 }

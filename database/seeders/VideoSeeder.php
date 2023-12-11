@@ -15,14 +15,6 @@ class VideoSeeder extends Seeder
     public function run(): void
     {
         Video::create([
-            'title' => 'Elements',
-            'main_character' => 'Lindsey Stirling',
-            'type' => TipoVideo::MUSICA->value,
-            'description' => 'Dubstep Violin Original Song',
-            'url' => 'https://www.youtube.com/watch?v=sf6LD2B_kDQ',
-        ]);
-
-        Video::create([
             'title' => 'Feel Good Inc.',
             'main_character' => 'Leo Moracchioli',
             'type' => TipoVideo::MUSICA->value,
@@ -34,8 +26,16 @@ class VideoSeeder extends Seeder
             'title' => 'Real Madrid',
             'main_character' => 'CRISTIANO RONALDO',
             'type' => TipoVideo::MUSICA->value,
-            'description' => 'ALL #UCL GOALS!',
+            'description' => 'Impossible Moments',
             'url' => 'https://www.youtube.com/watch?v=fJLrfALZGmE',
+        ]);
+
+        Video::create([
+            'title' => 'Elements',
+            'main_character' => 'Lindsey Stirling',
+            'type' => TipoVideo::MUSICA->value,
+            'description' => 'Dubstep Violin Original Song',
+            'url' => 'https://www.youtube.com/watch?v=sf6LD2B_kDQ',
         ]);
     }
 }
