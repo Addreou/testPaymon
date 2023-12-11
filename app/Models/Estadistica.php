@@ -15,14 +15,13 @@ class Estadistica extends Model
     protected $primaryKey = 'id';
 
     protected $fillable = [
-
+        'user_id',
+        'video_id',
+        'type',
     ];
 
     protected $hidden = [
         'id',
-        'user_id',
-        'video_id',
-        'type',
         'created_at',
         'updated_at',
         'deleted_at',
